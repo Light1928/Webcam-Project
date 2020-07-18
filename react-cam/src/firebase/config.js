@@ -1,4 +1,4 @@
-const firebaseConfig = {
+/*const firebaseConfig = {
     apiKey: "************",
     authDomain: "***********",
     databaseURL: "************",
@@ -7,3 +7,4 @@ const firebaseConfig = {
     messagingSenderId: "***********",
     appId: "****************"
   };
+*/
