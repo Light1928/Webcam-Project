@@ -20,6 +20,19 @@ firebaseConfig = {
   'appId': "********************",
 }
 
+#firebase storageから画像を全て取得
+
+firebase = pyrebase.initialize_app(firebaseConfig)
+storage = firebase.storage()
+datadir = './'
+all_files = storage.child('images/').list_files()
+
+for file in all_files:
+    try:
+        file.download_to_filename(datadir + file.name)
+    except:
+        print('Download Failed')
+
 
 
 # Youtube参照
