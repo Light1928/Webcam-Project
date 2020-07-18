@@ -1,12 +1,15 @@
 import face_recognition
 import cv2
 import numpy as np
-import pickle
-#import mysql.connector as mydb
-#import dlib 表情や輪郭までわかるモジュール
+import os
+import re
 import pyrebase
+import pickle
+# import mysql.connector as mydb
+# import dlib 表情や輪郭までわかるモジュール
 
-#この部分はGitHub上に公開してはいけない
+
+# この部分はGitHub上に公開してはいけない
 firebaseConfig = {
   'apiKey': "********************",
   'authDomain': "********************",
@@ -17,8 +20,10 @@ firebaseConfig = {
   'appId': "********************",
 }
 
-#Youtube参照
-#アップロード用
+
+
+# Youtube参照
+# アップロード用
 # firebase = pyrebase.initialize_app(firebaseConfig)
 # photo_path = '/Users/light1928/Pictures/bill.jpg'
 # storage = firebase.storage()
@@ -26,13 +31,14 @@ firebaseConfig = {
 # image_url = storage.child('images/bill.jpg').get_url(token=None) 
 # print(image_url)
 
-#ダウンロード用
-firebase = pyrebase.initialize_app(firebaseConfig)
-storage = firebase.storage()
-path_on_cloud = 'images/foo.jpg'
-path_local = 'my_image.jpg'
-storage.child(path_on_cloud).download('images/test_download.jpg')
+# ダウンロード用
+# firebase = pyrebase.initialize_app(firebaseConfig)
+# storage = firebase.storage()
+# path_on_cloud = 'images/'
+# path_local = 'my_image.jpg'
+# storage.child(path_on_cloud).download('images/test_download.jpg')
 
+# storage.child(path_on_cloud).download('images/')
 # This is a demo of running face recognition on live video from your webcam. It's a little more complicated than the
 # other example, but it includes some basic performance tweaks to make things run a lot faster:
 #   1. Process each video frame at 1/4 resolution (though still display it at full resolution)
@@ -47,9 +53,20 @@ video_capture = cv2.VideoCapture(0)
 
 # Load a sample picture and learn how to recognize it.
 
-#テスト用
-Steve_image = face_recognition.load_image_file('images/test_download.jpg')
-Steve_face_encoding = face_recognition.face_encodings(Steve_image)[0]
+# Initialize some variables
+
+known_face_encodings = []
+known_face_names = []
+known_faces_filenames = []
+
+# テスト用
+# Steve_image = face_recognition.load_image_file('images/Steve_Jobs.jpg')
+# Steve_face_encoding = face_recognition.face_encodings(Steve_image)[0]
+
+
+for (dirpath, dirnames, filenames) in os.walk('./images/'):
+    known_faces_filenames.extend(filenames)
+    break
 
 # Load a second sample picture and learn how to recognize it.
 # biden_image = face_recognition.load_image_file("biden.jpg")
@@ -57,23 +74,30 @@ Steve_face_encoding = face_recognition.face_encodings(Steve_image)[0]
 
 # Create arrays of known face encodings and their names
 
-#encodingしたデータを多次元配列で格納される　　型は numpy.ndarray
+# encodingしたデータを多次元配列で格納される　　型は numpy.ndarray
 
-#写真に近い人の名前が表示されてしまう？　
-known_face_encodings = [
-   # Tani_face_encoding,
-    Steve_face_encoding,
-    #steve
-    #Bill_face_encoding
+face_names = []
+for filename in known_faces_filenames:
+    # Load each file
+    face = face_recognition.load_image_file('./images/' + filename)
+    # Extract the name of each employee and add it to known_face_names
+    known_face_names.append(re.sub("[0-9]",'', filename[:-4]))
+    # Encode de face of every employee
+    known_face_encodings.append(face_recognition.face_encodings(face)[0])
 
-]
-known_face_names = [
-   # "Tani_Futa",
-    "Steve_Jobs"
-    #"bill"
-]
 
-# Initialize some variables
+# #写真に近い人の名前が表示されてしまう？　
+# known_face_encodings = [
+#    # Tani_face_encoding,
+#     Steve_face_encoding,
+#  #   Bill_face_encoding
+#
+# ]
+# known_face_names = [
+#     "Steve_Jobs",
+#
+# ]
+
 face_locations = []
 face_encodings = []
 face_names = []
@@ -117,7 +141,7 @@ while True:
     process_this_frame = not process_this_frame
 
 
-    # Display the results
+# Display the results
     for (top, right, bottom, left), name in zip(face_locations, face_names):
         # Scale back up face locations since the frame we detected in was scaled to 1/4 size
         top *= 4
