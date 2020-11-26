@@ -38,7 +38,7 @@ for file in all_files:
 # Youtube参照
 # アップロード用
 # firebase = pyrebase.initialize_app(firebaseConfig)
-# photo_path = '/Users/light1928/Pictures/bill.jpg'
+# photo_path = '/Users//Pictures/bill.jpg'
 # storage = firebase.storage()
 # storage.child('images/bill.jpg').put(photo_path)  # どこにアップロードしたいかのパス指定もできます
 # image_url = storage.child('images/bill.jpg').get_url(token=None) 
@@ -101,7 +101,7 @@ for filename in known_faces_filenames:
 
 # #写真に近い人の名前が表示されてしまう？　
 # known_face_encodings = [
-#    # Tani_face_encoding,
+#    
 #     Steve_face_encoding,
 #  #   Bill_face_encoding
 #
