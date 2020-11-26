@@ -2,10 +2,10 @@ import mysql.connector as mydb
 
 # 接続する 
 conn = mydb.connect(
-    host='192.168.10.8',
-    port='3306',
+    host='*****',
+    port='****',
     user='root',
-    password='password',
+    password='******',
     database='django_docker'
 )
 
